@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <todo-navbar class="mb-3"></todo-navbar>
-    <div class="container">
+    <todo-navbar></todo-navbar>
+    <div class="container my-4">
       <todo-board ></todo-board>
     </div>
   </div>

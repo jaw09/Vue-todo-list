@@ -1,5 +1,5 @@
 <template>
-  <div class="todo-item" :class="{ 'mark-up': item.markUp}">
+  <div class="todo-item mb-4" :class="{ 'mark-up': item.markUp}">
     <div class="checkbox-group todo-control flex-1">
       <label class="control control--checkbox">
         <input type="checkbox"

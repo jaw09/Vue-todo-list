@@ -1,6 +1,6 @@
 <template>
   <div class="todo-edit-item mb-4">
-    <div class="todo-item" :class="{ 'mark-up': item.markUp}">
+    <div class="todo-item" :class="{ 'mark-up': item.markUp || false}" v-if="item">
       <div class="checkbox-group todo-control flex-1">
       <label class="control control--checkbox">
         <input type="checkbox"
@@ -13,11 +13,25 @@
       </label>
       </div>
       <div class="content todo-control flex-4">
-        <p class="title" :class="{completed: item.status === 'completed'}">{{item.title}}</p>
+        <input type="text" v-model="cacheTodo.message" class="form-control">
       </div>
       <div class="font-icon-group todo-control flex-2">
         <a href="#" class="text-muted" @click.prevent="changeMarkUp">
           <i class="far fa-star" v-if="!item.markUp"></i>
+          <i class="fas fa-star text-success" v-else></i>
+        </a>
+        <a href="#" class="text-muted" @click.prevent="closeEdit">
+          <i class="fas fa-pencil-alt text-primary"></i>
+        </a>
+      </div>
+    </div>
+    <div class="todo-item" v-if="!item">
+      <div class="content todo-control flex-4">
+        <input type="text" v-model="cacheTodo.message" class="form-control">
+      </div>
+      <div class="font-icon-group todo-control flex-2">
+        <a href="#" class="text-muted" @click.prevent="changeMarkUp">
+          <i class="far fa-star" v-if="!cacheTodo.markUp"></i>
           <i class="fas fa-star text-success" v-else></i>
         </a>
         <a href="#" class="text-muted" @click.prevent="closeEdit">
@@ -75,7 +89,7 @@ export default {
     changeStatus() {},
     changeMarkUp() {},
     closeEdit() {
-      this.$emit("closeEdit", this.item.id);
+      this.$emit("closeEdit");
     },
     updateTodo() {}
   }

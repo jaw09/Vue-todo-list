@@ -1,10 +1,17 @@
 <template>
   <div class="row">
-    <div class="col-md-8 offset-md-2">
+    <div class="col-md-8 offset-md-2 input-form" v-if="isNewTodo === false">
+      <i class="fas fa-plus fa-lg text-black-50 plus-icon"></i>
+      <input type="text" class="form-control form-control-lg pl-5" placeholder="Add Task"
+        v-model="message" @focus="addTodo">
+    </div>
+    <div class="col-md-8 offset-md-2 mt-4">
+      <todo-edit-item v-if="isNewTodo && !currentEdit.id" @closeEdit="closeEdit"
+          ></todo-edit-item>{{isNewTodo && !currentEdit.id}}
       <div v-for="item in list"
           :key="item.id"
           v-if="currentTab === 'tasks' || currentTab === item.status">
-        <todo-item :item="item" v-if="false"></todo-item>
+        <todo-item :item="item" v-if="true"></todo-item>
         <todo-edit-item :item="item"></todo-edit-item>
       </div>
     </div>
@@ -16,6 +23,23 @@ import TodoItem from "./TodoItem";
 import TodoEditItem from "./TodoEditItem";
 
 export default {
+  data() {
+    return {
+      message: "",
+      isNewTodo: false,
+      currentEdit: {}
+    };
+  },
+  methods: {
+    addTodo() {
+      this.isNewTodo = true;
+      this.currentEdit = {};
+    },
+    closeEdit() {
+      this.currentEdit = {};
+      this.isNewTodo = false;
+    }
+  },
   computed: {
     list() {
       return this.$store.getters.getList;
@@ -32,6 +56,14 @@ export default {
 </script>
 
 <style lang="scss">
+.input-form {
+  position: relative;
+  .plus-icon {
+    position: absolute;
+    top: 0.95rem;
+    left: 2rem;
+  }
+}
 </style>
 
 
