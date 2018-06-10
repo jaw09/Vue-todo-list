@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <todo-navbar @changeTab="changeTab"></todo-navbar>
+    <todo-navbar @changeTab="changeTab" class="mb-3"></todo-navbar>
     <div class="container">
-      <div v-for="item in list" :key="item.id" v-if="currentTab === 'tasks' || currentTab === item.status">
-        {{item.title}}
-      </div>
+      <todo-board :list="list" :currentTab="currentTab"></todo-board>
     </div>
   </div>
 </template>
 
 <script>
 import Navbar from "./components/Navbar";
+import TodoBoard from "./components/TodoBoard";
 
 export default {
   name: "App",
@@ -20,7 +19,8 @@ export default {
         {
           id: 1,
           title: "第一事件",
-          timestamp: 1528557635,
+          startDate: "2018-06-10",
+          endDate: "2018-06-11",
           comment: "",
           status: "progress",
           markUp: false,
@@ -29,10 +29,11 @@ export default {
         {
           id: 2,
           title: "第二事件",
-          timestamp: 1528559635,
+          startDate: "2018-06-11",
+          endDate: "2018-06-12",
           comment: "",
           status: "completed",
-          markUp: false,
+          markUp: true,
           file: ""
         }
       ],
@@ -52,7 +53,8 @@ export default {
     }
   },
   components: {
-    TodoNavbar: Navbar
+    TodoNavbar: Navbar,
+    TodoBoard
   }
 };
 </script>

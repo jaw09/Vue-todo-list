@@ -40,6 +40,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "bootstrap/scss/_functions.scss";
+@import "../assets/helpers/_variables.scss";
 header {
   height: 76px;
 }
@@ -48,13 +50,13 @@ header {
   position: relative;
   display: block;
   padding: 20px 0;
-  color: #00408b;
+  color: $secondary;
   font-size: 24px;
   transition: all 0.3s;
   &:hover,
   &:focus,
   &.active {
-    color: white;
+    color: $white;
     text-decoration: none;
     outline: 0;
     .line {
@@ -63,7 +65,7 @@ header {
       bottom: 0;
       width: 50%;
       height: 5px;
-      background-color: #00408b;
+      background-color: $secondary;
     }
   }
 }
