@@ -2,12 +2,17 @@
   <div class="todo-item" :class="{ 'mark-up': item.markUp}">
     <div class="checkbox-group todo-control flex-1">
       <label class="control control--checkbox">
-        <input type="checkbox" :checked="item.status === 'completed'" :change="changeStatus"/>
+        <input type="checkbox"
+              :checked="item.status === 'completed'"
+              v-model="item.status"
+              :true-value="'completed'"
+              :false-value="'progress'"
+              :change="changeStatus"/>
         <div class="control__indicator"></div>
       </label>
     </div>
     <div class="content todo-control flex-4">
-      <p class="title">{{item.title}}</p>
+      <p class="title" :class="{completed: item.status === 'completed'}">{{item.title}}</p>
       <div class="info-font-group">
         <i class="far fa-calendar-alt" v-if="item.startDat || item.endDate"></i>
         <span>{{ item.startDate }}</span>
@@ -33,9 +38,11 @@
 export default {
   props: ["item"],
   methods: {
+    changeStatus() {},
     changeMarkUp() {},
-    openEdit() {},
-    changeStatus() {}
+    openEdit() {
+      this.$emit("openEdit", this.item.id);
+    }
   }
 };
 </script>
@@ -65,17 +72,19 @@ export default {
       flex: 2;
     }
   }
-  .font-icon-group {
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: 24px;
-    font-size: 24px;
-  }
-  .checkbox-group {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 35px;
-  }
+}
+
+.font-icon-group {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 24px;
+  font-size: 24px;
+}
+
+.checkbox-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 35px;
 }
 
 .control {

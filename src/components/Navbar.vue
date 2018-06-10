@@ -33,7 +33,8 @@ export default {
     changeTab(e) {
       const vm = this;
       vm.tab = e.target.innerText;
-      this.$emit("changeTab", vm.tab);
+      //this.$emit("changeTab", vm.tab);
+      vm.$store.dispatch("changeTab", vm.tab);
     }
   }
 };
