@@ -7,12 +7,18 @@
     </div>
     <div class="col-md-8 offset-md-2 mt-4">
       <todo-edit-item v-if="isNewTodo && !currentEdit.id" @closeEdit="closeEdit"
-          ></todo-edit-item>{{isNewTodo && !currentEdit.id}}
+          ></todo-edit-item>
       <div v-for="item in list"
           :key="item.id"
           v-if="currentTab === 'tasks' || currentTab === item.status">
-        <todo-item :item="item" v-if="true"></todo-item>
-        <todo-edit-item :item="item"></todo-edit-item>
+        <todo-item :item="item"
+                    @openEdit="openEdit"
+                    v-if="currentEdit.id !== item.id">
+                    </todo-item>
+        <todo-edit-item :item="item"
+                    @closeEdit="closeEdit"
+                    v-if="currentEdit.id === item.id">
+                    </todo-edit-item>
       </div>
     </div>
   </div>
@@ -34,6 +40,11 @@ export default {
     addTodo() {
       this.isNewTodo = true;
       this.currentEdit = {};
+    },
+    openEdit(id) {
+      const vm = this;
+      this.isNewTodo = true;
+      this.currentEdit = this.list.find(item => item.id === id);
     },
     closeEdit() {
       this.currentEdit = {};
