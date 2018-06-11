@@ -7,7 +7,7 @@
               v-model="item.status"
               :true-value="'completed'"
               :false-value="'progress'"
-              :change="changeStatus"/>
+              @change="changeStatus"/>
         <div class="control__indicator"></div>
       </label>
     </div>
@@ -38,9 +38,14 @@
 export default {
   props: ["item"],
   methods: {
-    changeStatus() {},
-    changeMarkUp() {},
+    changeStatus() {
+      console.log(this.item.id);
+    },
+    changeMarkUp() {
+      console.log(this.item.id);
+    },
     openEdit() {
+      console.log(this.item.id);
       this.$emit("openEdit", this.item.id);
     }
   }

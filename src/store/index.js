@@ -1,30 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
+import map from 'lodash/map'
 
 Vue.use(Vuex);
 
 const state = {
-  list: [{
-      id: 1,
-      title: "第一事件",
-      startDate: "2018-06-10",
-      endDate: "2018-06-11",
-      comment: "",
-      status: "progress",
-      markUp: false,
-      file: ""
-    },
-    {
-      id: 2,
-      title: "第二事件",
-      startDate: "2018-06-11",
-      endDate: "2018-06-12",
-      comment: "",
-      status: "completed",
-      markUp: true,
-      file: ""
-    }
-  ],
+  list: [],
   currentTab: 'tasks'
 };
 
@@ -37,6 +19,20 @@ const mutations = {
     } else {
       state.currentTab = "progress";
     }
+  },
+  'CHANGE_STATUS' (state, id) {
+
+  },
+  'CHANGE_MARKUP' (state, id) {
+
+  },
+  'UPDATE_DATA' (state, list) {
+    map(list, (item, id) => {
+      item.id = id
+    });
+    state.list = {
+      ...list
+    };
   }
 };
 
@@ -45,6 +41,28 @@ const actions = {
     commit
   }, tab) {
     commit('CHANGE_TAB', tab);
+  },
+  changeStatus({
+    commit
+  }, id) {
+    commit('CHANGE_STATUS', id);
+  },
+  changeMarkup({
+    commit
+  }, id) {
+    commit('CHANGE_MARKUP', id);
+  },
+  updateData({
+    commit
+  }) {
+    axios.get('https://vue-todolist-273f9.firebaseio.com/todos.json')
+      .then(function (response) {
+        console.log(response);
+        commit("UPDATE_DATA", response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 };
 

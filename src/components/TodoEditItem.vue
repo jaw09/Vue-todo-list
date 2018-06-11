@@ -1,11 +1,11 @@
 <template>
   <div class="todo-edit-item mb-4">
-    <div class="todo-item" :class="{ 'mark-up': item.markUp || false}" v-if="item">
+    <div class="todo-item" :class="{ 'mark-up': cacheTodo.markUp || false}" v-if="!isNew">
       <div class="checkbox-group todo-control flex-1">
       <label class="control control--checkbox">
         <input type="checkbox"
-              :checked="item.status === 'completed'"
-              v-model="item.status"
+              :checked="cacheTodo.status === 'completed'"
+              v-model="cacheTodo.status"
               :true-value="'completed'"
               :false-value="'progress'"
               :change="changeStatus"/>
@@ -13,11 +13,11 @@
       </label>
       </div>
       <div class="content todo-control flex-4">
-        <input type="text" v-model="cacheTodo.message" class="form-control">
+        <input type="text" v-model="cacheTodo.title" class="form-control">
       </div>
       <div class="font-icon-group todo-control flex-2">
         <a href="#" class="text-muted" @click.prevent="changeMarkUp">
-          <i class="far fa-star" v-if="!item.markUp"></i>
+          <i class="far fa-star" v-if="!cacheTodo.markUp"></i>
           <i class="fas fa-star text-success" v-else></i>
         </a>
         <a href="#" class="text-muted" @click.prevent="closeEdit">
@@ -25,9 +25,9 @@
         </a>
       </div>
     </div>
-    <div class="todo-item" v-if="!item">
+    <div class="todo-item" v-if="isNew">
       <div class="content todo-control flex-4">
-        <input type="text" v-model="cacheTodo.message" class="form-control">
+        <input type="text" v-model="cacheTodo.title" class="form-control">
       </div>
       <div class="font-icon-group todo-control flex-2">
         <a href="#" class="text-muted" @click.prevent="changeMarkUp">
@@ -60,7 +60,7 @@
           <label for="">Comment</label>
           <div>
             <textarea class="form-control w-100 border-0"
-              v-model="comment"></textarea>
+              v-model="cacheTodo.comment"></textarea>
           </div>
         </div>
       </div>
@@ -69,8 +69,8 @@
       <button class="btn text-danger w-50 rectangle animation-danger" @click="closeEdit">
         <i class="fas fa-times"></i> Cancel
       </button>
-      <button class="btn btn-primary w-50 rectangle" @click="updateTodo">
-        <i class="fas fa-plus"></i> Update Task
+      <button class="btn btn-primary w-50 rectangle" @click="newTodo">
+        <i class="fas fa-plus"></i> {{ !isNew ? 'Update Task' : 'Add Task'}}
       </button>
     </div>
   </div>
@@ -82,7 +82,8 @@ export default {
   data() {
     return {
       cacheTodo: {},
-      comment: ""
+      comment: "",
+      isNew: false
     };
   },
   methods: {
@@ -91,7 +92,51 @@ export default {
     closeEdit() {
       this.$emit("closeEdit");
     },
-    updateTodo() {}
+    newTodo() {
+      const vm = this;
+      const newTodo = { ...vm.cacheTodo };
+      if (this.isNew) {
+        newTodo.markUp = false;
+        newTodo.status = "progress";
+        vm.$http
+          .post(`https://vue-todolist-273f9.firebaseio.com/todos.json`, newTodo)
+          .then(response => {
+            vm.$emit("closeEdit");
+            vm.$store.dispatch("updateData");
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        vm.$http
+          .put(
+            `https://vue-todolist-273f9.firebaseio.com/todos/${
+              newTodo.id
+            }.json`,
+            newTodo
+          )
+          .then(response => {
+            console.log(response);
+            vm.$emit("closeEdit");
+            vm.$store.dispatch("updateData");
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    }
+  },
+  created() {
+    if (!this.item) {
+      this.isNew = true;
+    } else {
+      this.cacheTodo = { ...this.item };
+    }
+  },
+  computed: {
+    listLength() {
+      return this.$store.getters.getList.length;
+    }
   }
 };
 </script>

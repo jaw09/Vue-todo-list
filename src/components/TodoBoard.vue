@@ -27,6 +27,7 @@
 <script>
 import TodoItem from "./TodoItem";
 import TodoEditItem from "./TodoEditItem";
+import find from "lodash/find";
 
 export default {
   data() {
@@ -44,7 +45,7 @@ export default {
     openEdit(id) {
       const vm = this;
       this.isNewTodo = true;
-      this.currentEdit = this.list.find(item => item.id === id);
+      this.currentEdit = find(this.list, item => item.id === id);
     },
     closeEdit() {
       this.currentEdit = {};
@@ -62,6 +63,10 @@ export default {
   components: {
     TodoItem,
     TodoEditItem
+  },
+  created() {
+    const vm = this;
+    vm.$store.dispatch("updateData");
   }
 };
 </script>
