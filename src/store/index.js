@@ -20,12 +20,6 @@ const mutations = {
       state.currentTab = "progress";
     }
   },
-  'CHANGE_STATUS' (state, id) {
-
-  },
-  'CHANGE_MARKUP' (state, id) {
-
-  },
   'UPDATE_DATA' (state, list) {
     map(list, (item, id) => {
       item.id = id
@@ -44,20 +38,20 @@ const actions = {
   },
   changeStatus({
     commit
-  }, id) {
-    commit('CHANGE_STATUS', id);
-  },
-  changeMarkup({
-    commit
-  }, id) {
-    commit('CHANGE_MARKUP', id);
+  }, item) {
+    axios.put(
+        `https://vue-todolist-273f9.firebaseio.com/todos/${item.id}.json`, item
+      )
+      .then(response => {})
+      .catch(err => {
+        commit("UPDATE_DATA", response.data);
+      });
   },
   updateData({
     commit
   }) {
     axios.get('https://vue-todolist-273f9.firebaseio.com/todos.json')
       .then(function (response) {
-        console.log(response);
         commit("UPDATE_DATA", response.data);
       })
       .catch(function (error) {

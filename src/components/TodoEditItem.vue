@@ -1,17 +1,6 @@
 <template>
   <div class="todo-edit-item mb-4">
     <div class="todo-item" :class="{ 'mark-up': cacheTodo.markUp || false}" v-if="!isNew">
-      <div class="checkbox-group todo-control flex-1">
-      <label class="control control--checkbox">
-        <input type="checkbox"
-              :checked="cacheTodo.status === 'completed'"
-              v-model="cacheTodo.status"
-              :true-value="'completed'"
-              :false-value="'progress'"
-              :change="changeStatus"/>
-        <div class="control__indicator"></div>
-      </label>
-      </div>
       <div class="content todo-control flex-4">
         <input type="text" v-model="cacheTodo.title" class="form-control">
       </div>
@@ -87,8 +76,10 @@ export default {
     };
   },
   methods: {
-    changeStatus() {},
-    changeMarkUp() {},
+    changeMarkUp() {
+      const vm = this;
+      vm.cacheTodo.markUp = !vm.cacheTodo.markUp;
+    },
     closeEdit() {
       this.$emit("closeEdit");
     },

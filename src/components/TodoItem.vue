@@ -39,13 +39,15 @@ export default {
   props: ["item"],
   methods: {
     changeStatus() {
-      console.log(this.item.id);
+      const vm = this;
+      vm.$store.dispatch("changeStatus", this.item);
     },
     changeMarkUp() {
-      console.log(this.item.id);
+      const vm = this;
+      vm.item.markUp = !vm.item.markUp;
+      vm.$store.dispatch("changeStatus", this.item);
     },
     openEdit() {
-      console.log(this.item.id);
       this.$emit("openEdit", this.item.id);
     }
   }
